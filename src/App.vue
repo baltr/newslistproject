@@ -9,7 +9,7 @@
       </div>
       <input type="text" v-model="searchQuery" placeholder="Search News"/>
     </form>
-    <NewsPiece v-for="news in newsList" :news="news" :key="news.slug"/>
+    <NewsPiece v-for="news in filteredNews" :news="news" :key="news.slug"/>
   </div>
 </template>
 
