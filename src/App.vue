@@ -38,14 +38,7 @@ export default{
     }
   },
   created(){
-    axios.get("https://www.alpha-orbital.com/last-100-news.json")
-    .then((response) => {
-      console.log(response.data)
-      this.fetchFinished = true
-      this.newsList = response.data
-    }).catch((response) => {
-      console.log(response)
-    })
+    this.fetchNews()
   },
   computed:{
     existingCategories(){
@@ -77,6 +70,16 @@ export default{
     },
     resetQuery(){
       this.searchQuery=''
+    },
+    fetchNews(){
+      axios.get("https://www.alpha-orbital.com/last-100-news.json")
+      .then((response) => {
+        console.log(response.data)
+        this.fetchFinished = true
+        this.newsList = response.data
+      }).catch((response) => {
+        console.log(response)
+      })
     }
   },
   components:{
