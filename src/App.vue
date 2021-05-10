@@ -1,17 +1,18 @@
 <template>
   <div id="app">
-    <div v-if="filteredNews">
+    <div v-if="fetchFinished">
       <form>
         <div v-for="category in categories" :key="category.id">
-          <div v-show="(existingCategories.includes(category.id.toString()))">
+          <div v-show="(existingCategories.includes(category.id.toString()))" @click="resetQuery">
             <input type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>
             <label :for="category.id">{{category.name}}</label>
           </div>
         </div>
-        <input type="text" id="searchField" :value="searchQuery" placeholder="Search News"/>
-        <button type="button" @click="search">Search</button>
       </form>
-      <NewsPiece v-for="news in filteredNews" :news="news" :key="news.slug"/>
+      <input type="text" id="searchField" :value="searchQuery" @keypress.enter="search" placeholder="Search News"/>
+      <button type="button" @click="search">Search</button>
+      <p>Currently showing {{ filteredNewsBySearch.length }} articles</p>
+      <NewsPiece v-for="news in filteredNewsBySearch" :news="news" :key="news.slug"/>
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@ import uniq from 'lodash/uniq'
 export default{
   data(){
     return{
+      fetchFinished: false,
       newsList: [],
       categories:[
         {id: 1, name: 'X Universe'},
@@ -39,6 +41,7 @@ export default{
     axios.get("https://www.alpha-orbital.com/last-100-news.json")
     .then((response) => {
       console.log(response.data)
+      this.fetchFinished = true
       this.newsList = response.data
     }).catch((response) => {
       console.log(response)
@@ -48,26 +51,32 @@ export default{
     existingCategories(){
       return uniq(this.newsList.map(({post_category_id}) => post_category_id))
     },
-    filteredNews(){
+    filteredNewsByCategory(){
       if(this.selectedCategory){
         return this.newsList.filter((news) => {
-          return news.post_category_id.includes(this.selectedCategory) &&
-          (news.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          news.excerpt.toLowerCase().includes(this.searchQuery.toLowerCase()))
+          return news.post_category_id == this.selectedCategory
         })
-      }else if(this.searchQuery.length){
-        return this.newsList.filter((news) => {
+      }else{
+        return this.newsList;
+      }
+    },
+    filteredNewsBySearch(){
+      if(this.searchQuery.length){
+        return this.filteredNewsByCategory.filter((news) => {
           return (news.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           news.excerpt.toLowerCase().includes(this.searchQuery.toLowerCase()))
         })
       }else{
-        return this.newsList;
+        return this.filteredNewsByCategory
       }
     }
   },
   methods:{
     search(){
       this.searchQuery = document.getElementById('searchField').value
+    },
+    resetQuery(){
+      this.searchQuery=''
     }
   },
   components:{
@@ -85,17 +94,13 @@ export default{
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+html{
+  background-image: url("assets/background_image.jpg");
+  background-attachment: fixed;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+div{
+  color:white;
 }
 
 [class*="col-"] {
