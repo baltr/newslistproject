@@ -1,15 +1,18 @@
 <template>
   <div id="app">
-    <form>
-      <div v-for="category in categories" :key="category.id">
-        <div v-show="(existingCategories.includes(category.id.toString()))">
-          <input type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>
-          <label :for="category.id">{{category.name}}</label>
+    <div v-if="filteredNews">
+      <form>
+        <div v-for="category in categories" :key="category.id">
+          <div v-show="(existingCategories.includes(category.id.toString()))">
+            <input type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>
+            <label :for="category.id">{{category.name}}</label>
+          </div>
         </div>
-      </div>
-      <input type="text" v-model="searchQuery" placeholder="Search News"/>
-    </form>
-    <NewsPiece v-for="news in filteredNews" :news="news" :key="news.slug"/>
+        <input type="text" id="searchField" :value="searchQuery" placeholder="Search News"/>
+        <button type="button" @click="search">Search</button>
+      </form>
+      <NewsPiece v-for="news in filteredNews" :news="news" :key="news.slug"/>
+    </div>
   </div>
 </template>
 
@@ -49,17 +52,22 @@ export default{
       if(this.selectedCategory){
         return this.newsList.filter((news) => {
           return news.post_category_id.includes(this.selectedCategory) &&
-          (news.title.includes(this.searchQuery) ||
-          news.excerpt.includes(this.searchQuery))
+          (news.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          news.excerpt.toLowerCase().includes(this.searchQuery.toLowerCase()))
         })
       }else if(this.searchQuery.length){
         return this.newsList.filter((news) => {
-          return (news.title.includes(this.searchQuery) ||
-          news.excerpt.includes(this.searchQuery))
+          return (news.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          news.excerpt.toLowerCase().includes(this.searchQuery.toLowerCase()))
         })
       }else{
         return this.newsList;
       }
+    }
+  },
+  methods:{
+    search(){
+      this.searchQuery = document.getElementById('searchField').value
     }
   },
   components:{
