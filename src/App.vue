@@ -4,7 +4,7 @@
       <form>
         <div v-for="category in categories" :key="category.id">
           <div v-show="(existingCategories.includes(category.id.toString()))" @click="resetQuery">
-            <input type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>
+            <input class="catSelect" type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>
             <label :for="category.id">{{category.name}}</label>
           </div>
         </div>
@@ -95,6 +95,26 @@ export default{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.catSelect{
+  visibility:hidden;
+}
+
+label{
+  cursor: pointer;
+}
+
+.catSelect:checked + label {
+  color: blue;
+}
+
+.fl-left{
+  float: left;
+}
+
+.fl-right{
+  float: right;
 }
 
 html{
