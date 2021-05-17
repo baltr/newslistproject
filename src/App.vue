@@ -4,6 +4,10 @@
       <div class="s-fixed inline-bl">
         <div class="m-auto cats">
           <form class="m-auto inline-bl">
+            <div class="fl-left">
+              <input class="catSelect" type="radio" id="All" value="" v-model="selectedCategory" checked/>
+              <label for="All">All</label>
+            </div>
             <div class="fl-left" v-for="category in categories" :key="category.id">
               <div v-show="(existingCategories.includes(category.id.toString()))" @click="resetQuery">
                 <input class="catSelect" type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>

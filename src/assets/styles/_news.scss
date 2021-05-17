@@ -8,9 +8,7 @@
     }
     img {
         margin: 0px;
-        width: 100%;
-        max-width: 400px;
-        padding: 0 30px;
+        width: 90%;
     }
     a {
         color: #00aeff;
@@ -24,6 +22,7 @@
         color: gray;
     }
     .news-container {
+        width:90%;
 		position: relative;
 	}
 }
@@ -40,6 +39,10 @@
         height: 225px;
         h3 {
             margin-top: 0;
+        }
+        img{
+            padding: 0 30px;
+            max-width:400px;
         }
         a {
             position: absolute;
