@@ -1,17 +1,23 @@
 <template>
-  <div id="app">
-    <div v-if="fetchFinished">
-      <form>
-        <div v-for="category in categories" :key="category.id">
-          <div v-show="(existingCategories.includes(category.id.toString()))" @click="resetQuery">
-            <input class="catSelect" type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>
-            <label :for="category.id">{{category.name}}</label>
-          </div>
+  <div id="app" class="m-auto col-s-10">
+    <div class="col-s-12" v-if="fetchFinished">
+      <div class="s-fixed inline-bl">
+        <div class="m-auto cats">
+          <form class="m-auto inline-bl">
+            <div class="fl-left" v-for="category in categories" :key="category.id">
+              <div v-show="(existingCategories.includes(category.id.toString()))" @click="resetQuery">
+                <input class="catSelect" type="radio" :id="category.id" :value="category.id" v-model="selectedCategory"/>
+                <label :for="category.id">{{category.name}}</label>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
-      <input type="text" id="searchField" :value="searchQuery" @keypress.enter="search" placeholder="Search News"/>
-      <button type="button" @click="search">Search</button>
-      <p>Currently showing {{ filteredNewsBySearch.length }} articles</p>
+        <div class="flex m-auto">
+          <input class="flex-one" type="text" id="searchField" :value="searchQuery" @keypress.enter="search" placeholder="...search article title or excerpt..."/>
+          <button type="button" @click="search">Search</button>
+        </div>
+        <p>Currently showing {{ filteredNewsBySearch.length }} articles</p>
+      </div>
       <NewsPiece v-for="news in filteredNewsBySearch" :news="news" :key="news.slug"/>
     </div>
   </div>
@@ -90,6 +96,7 @@ export default{
 
 <style lang="scss">
 #app {
+  margin-top:15px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -97,7 +104,40 @@ export default{
   color: #2c3e50;
 }
 
+button{
+  background-color: #00aeff;
+  border: none;
+  height: 30px;
+}
+
+p{
+  margin-top:0;
+  font-size:13px;
+}
+
+.inline-bl{
+  display:inline-block;
+}
+
+.m-auto{
+  margin:0px auto;
+}
+
+.flex{
+  display:flex;
+}
+
+.flex-one{
+  flex:1
+}
+
+.cats{
+  margin-bottom:10px;
+}
+
 .catSelect{
+  height:0;
+  width:0;
   visibility:hidden;
 }
 
@@ -106,7 +146,8 @@ label{
 }
 
 .catSelect:checked + label {
-  color: blue;
+  color: #00aeff;
+  text-decoration: underline;
 }
 
 .fl-left{
@@ -120,6 +161,11 @@ label{
 html{
   background-image: url("assets/background_image.jpg");
   background-attachment: fixed;
+}
+
+body{
+  margin-left:0;
+  width:100%;
 }
 
 div{
@@ -144,6 +190,13 @@ div{
   .col-s-10 {width: 83.33%;}
   .col-s-11 {width: 91.66%;}
   .col-s-12 {width: 100%;}
+  
+  .s-fixed{
+    width:100%;
+    p{
+      text-align:right;
+    }
+  }
 }
 
 @media only screen and (min-width: 1200px) {
@@ -160,5 +213,9 @@ div{
   .col-10 {width: 83.33%;}
   .col-11 {width: 91.66%;}
   .col-12 {width: 100%;}
+  body{
+    width:1080px;
+    margin:auto;
+  }
 }
 </style>
