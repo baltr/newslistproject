@@ -41,11 +41,9 @@ label{
 	width: 0;
 	visibility: hidden;
 	&:checked {
-		+ {
-			label {
-				color: #00aeff;
-				text-decoration: underline;
-			}
+		+label {
+			color: #00aeff;
+			text-decoration: underline;
 		}
 	}
 }
@@ -59,7 +57,7 @@ label {
 	float: right;
 }
 html {
-	background-image: url("assets/background_image.jpg");
+	background-image: url("../background_image.jpg");
 	background-attachment: fixed;
 }
 body {
